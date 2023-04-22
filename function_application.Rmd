@@ -6,11 +6,6 @@ output: pdf_document
 ---
 
 ```{r}
-library(knitr)
-include_graphics("diagram.pdf")
-```
-
-```{r}
 library(tidyverse)
 #read in climate data
 climate_data <- read.table('clim.txt', header = TRUE)

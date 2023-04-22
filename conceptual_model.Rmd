@@ -1,0 +1,35 @@
+---
+title: "EDS230: Assignment2"
+author: "Andrew Bartnik, Gabrielle Smith"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r}
+library(tidyverse)
+#read in climate data
+climate_data <- read.table('clim.txt', header = TRUE)
+
+#source function
+source('almond_yield.R')
+
+#apply almond yield anomaly function to climate data
+almonds <- almond_yield(climate_data)
+
+#view function results
+almonds
+```
+
+```{r}
+#check maximum almond yield
+max(almonds$almond_yield)
+
+#check minimum almond yield
+min(almonds$almond_yield)
+
+#check mean almond yield 
+mean(almonds$almond_yield)
+```

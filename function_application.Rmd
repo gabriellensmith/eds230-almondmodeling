@@ -1,12 +1,14 @@
 ---
-title: "EDS230: Assignment2"
+title: 'EDS230: Assignment2'
 author: "Andrew Bartnik, Gabrielle Smith"
 date: "`r Sys.Date()`"
-output:
-  pdf_document: default
-  html_document: default
-  word_document: default
+output: pdf_document
 ---
+
+```{r}
+library(knitr)
+include_graphics("diagram.pdf")
+```
 
 ```{r}
 library(tidyverse)
@@ -25,11 +27,11 @@ almonds
 
 ```{r}
 #check maximum almond yield
-max(almonds$almond_yield)
+print(paste('The maximum almond yield anomaly is', round(max(almonds$almond_yield),3) , 'ton/acre.'))
 
 #check minimum almond yield
-min(almonds$almond_yield)
+print(paste('The lowest almond yield anomaly is', round(min(almonds$almond_yield),3), 'ton/acre.'))
 
 #check mean almond yield 
-mean(almonds$almond_yield)
+print(paste('The mean almond yield anomaly is', round(mean(almonds$almond_yield),3), 'ton/acre.'))
 ```

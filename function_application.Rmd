@@ -1,9 +1,13 @@
 ---
 title: 'EDS230: Assignment2'
-author: "Andrew Bartnik Gabrielle Smith"
+author: "Andrew Bartnik, Gabrielle Smith"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
+
+```{r}
+knitr::include_graphics('conceptual_model.pdf')
+```
 
 ```{r}
 library(tidyverse)

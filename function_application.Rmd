@@ -15,7 +15,7 @@ library(tidyverse)
 climate_data <- read.table('clim.txt', header = TRUE)
 
 #source function
-source('almond_yield.R')
+source('~/Desktop/MEDS/Spring/modeling/modeling/eds230-almondmodeling/almond_yield.R')
 
 #apply almond yield anomaly function to climate data
 almonds <- almond_yield(climate_data)
@@ -27,10 +27,49 @@ almonds
 ```{r}
 #check maximum almond yield
 print(paste('The maximum almond yield anomaly is', round(max(almonds$almond_yield),3) , 'ton/acre.'))
-
 #check minimum almond yield
 print(paste('The lowest almond yield anomaly is', round(min(almonds$almond_yield),3), 'ton/acre.'))
-
 #check mean almond yield 
 print(paste('The mean almond yield anomaly is', round(mean(almonds$almond_yield),3), 'ton/acre.'))
 ```
+
+## Profit Wrapper Function 
+
+```{r}
+profits <- profit_wrapper(climate_data, baseline_profit = 100, profit_anom = 100)
+head(profits)
+```
+## Sensitivity analysis
+```{r}
+# generate samples for both parameters
+nsamples = 300
+deviation = 0.15
+base_thresh = 10000
+profit_anom = runif(min=base_thresh-deviation*base_thresh,
+                max = base_thresh+deviation*base_thresh, n=nsamples)
+
+min_temp_co = rnorm(mean= -.015, sd = 0.1, n=nsamples)
+
+
+parms = cbind.data.frame(min_temp_co, profit_anom)
+results = parms %>% pmap(profit_wrapper, climate_data=climate_data, min_temp_co_2 = 0.0046, baseline_profit = 1000, total_p_co = 0.07, total_p_co_2 = 0.0043, yint = 0.28)
+
+
+# now we can extract results from the list as above
+mean_elect = map_df(results,`[`, c("mean")) 
+# and we can add the parameter values for each run
+mean_elect = cbind.data.frame(mean_elect, parms)
+```
+
+```{r}
+p1 = ggplot(mean_elect, aes(min_temp_co, mean, col=profit_anom))+
+  geom_point(cex=2)+
+  labs(y="Mean Profit $", x="Threshold Min Temp Coeff \n above which baseline profit is more efficient")
+
+p2 = ggplot(mean_elect, aes(profit_anom, mean, col=min_temp_co))+
+  geom_point(cex=2)+
+  labs(y="Mean Profit $", x="Threshold Profit Anomaly")
+
+ggarrange(p1,p2)
+```
+** **
